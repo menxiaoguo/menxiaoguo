@@ -35,5 +35,8 @@ DOMAIN-SUFFIX,dpxcf.niceduck.lol
 DOMAIN-SUFFIX,aca.misakaf.org
 
 #!Emby-琴鸟
-Domain,inside.lyrebirdemby.com
-Domain,cdn.lyrebirdemby.com
+DOMAIN-SUFFIX,inside.lyrebirdemby.com
+DOMAIN-SUFFIX,cdn.lyrebirdemby.com
+
+#!Emby-Temby
+DOMAIN-SUFFIX,temby856.285286.xyz
