@@ -1,0 +1,99 @@
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7894
+ipv6: false
+allow-lan: true
+unified-delay: true
+tcp-concurrent: true
+geodata-mode: true
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 48
+geox-url:
+    geoip: 'https://testingcf.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip.dat'
+    geosite: 'https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat'
+    mmdb: 'https://testingcf.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb'
+external-controller: '127.0.0.1:9090'
+secret: asdf1234
+external-ui: ui
+external-ui-url: 'https://ghp.ci/https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip'
+find-process-mode: strict
+global-client-fingerprint: chrome
+keep-alive-idle: 600
+keep-alive-interval: 30
+profile:
+    store-selected: true
+    store-fake-ip: true
+
+sniffer:
+    enable: true
+    sniff:
+      TLS: { ports: [443, 8443], override-destination: true }
+      HTTP: { ports: [80, 8080-8880], override-destination: true }
+    skip-domain: [Mijia Cloud, dlg.io.mi.com, +.push.apple.com, +.apple.com, MMTLS]
+    parse-pure-ip: false
+    force-dns-mapping: true
+    override-destination: true
+
+tun:
+    enable: true
+    stack: mixed
+    mtu: 1500
+    dns-hijack: ['any:53', 'tcp://any:53']
+    auto-route: true
+    auto-detect-interface: true
+
+dns:
+    enable: true
+    listen: '0.0.0.0:1053'
+    ipv6: false
+    respect-rules: true
+    enhanced-mode: fake-ip
+    fake-ip-range: 198.18.0.1/15
+    fake-ip-filter:
+        - "*.lan"
+        - "*.localdomain"
+        - "*.example"
+        - "*.invalid"
+        - "*.localhost"
+        - "*.test"
+        - "*.local"
+        - "*.home.arpa"
+        - "time.*.com"
+        - "time.*.gov"
+        - "time.*.edu.cn"
+        - "time.*.apple.com"
+        - "ntp.*.com"
+        - "+.pool.ntp.org"
+        - "swscan.apple.com"
+        - "mesu.apple.com"
+        - "localhost.ptlogin2.qq.com"
+        - "localhost.sec.qq.com"
+        - "localhost.work.weixin.qq.com"
+        - "*.msftconnecttest.com"
+        - "*.msftncsi.com"
+        - "+.weixin.qq.com"
+        - "+.wechat.com"
+        - "+.qq.com"
+        - "+.qpic.cn"
+        - "+.qlogo.cn"
+        - "+.tenpay.com"
+        - "+.gtimg.com"
+        - "+.gtimg.cn"
+        - "+.myqcloud.com"
+        - "+.360buyimg.com" # 京东所有商品图片/详情页 CDN
+        - "+.douyin.com"    # 抖音主站
+        - "+.douyincdn.com" # 抖音核心视频流
+        - "www.bilibili.com"
+        - "api.bilibili.com"
+        - "a.w.bilicdn1.com"
+        - "music.163.com"
+        - "*.music.163.com"
+        - "*.126.net"
+        - "y.qq.com"
+        - "*.y.qq.com"
+    default-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
+    proxy-server-nameserver: [223.5.5.5, 119.29.29.29, 114.114.114.114]
+    nameserver: ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query']
