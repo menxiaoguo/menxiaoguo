@@ -1,0 +1,497 @@
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7894
+ipv6: false
+allow-lan: true
+mode: rule
+log-level: info
+unified-delay: true
+tcp-concurrent: true
+geodata-mode: true
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 48
+geox-url:
+  geoip: "https://testingcf.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip.dat"
+  geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://testingcf.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
+external-controller: "127.0.0.1:9090"
+secret: "asdf1234"
+external-ui: ui
+external-ui-url: "https://ghp.ci/https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
+find-process-mode: strict
+keep-alive-idle: 600
+keep-alive-interval: 30
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+sniffer:
+  enable: true
+  sniff:
+    TLS:
+      ports:
+        - 443
+        - 8443
+      override-destination: true
+    HTTP:
+      ports:
+        - 80
+        - 8080-8880
+      override-destination: true
+  skip-domain:
+    - "Mijia Cloud"
+    - "dlg.io.mi.com"
+    - "+.push.apple.com"
+    - "+.apple.com"
+    - "MMTLS"
+  parse-pure-ip: false
+  force-dns-mapping: true
+  override-destination: true
+
+tun:
+  enable: true
+  stack: mixed
+  mtu: 1500
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-detect-interface: true
+
+dns:
+  enable: true
+  listen: "0.0.0.0:1053"
+  ipv6: false
+  respect-rules: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/15
+  fake-ip-filter:
+    - "*.lan"
+    - "*.localdomain"
+    - "*.example"
+    - "*.invalid"
+    - "*.localhost"
+    - "*.test"
+    - "*.local"
+    - "*.home.arpa"
+    - "time.*.com"
+    - "time.*.gov"
+    - "time.*.edu.cn"
+    - "time.*.apple.com"
+    - "ntp.*.com"
+    - "+.pool.ntp.org"
+    - "swscan.apple.com"
+    - "mesu.apple.com"
+    - "localhost.ptlogin2.qq.com"
+    - "localhost.sec.qq.com"
+    - "localhost.work.weixin.qq.com"
+    - "*.msftconnecttest.com"
+    - "*.msftncsi.com"
+    - "+.weixin.qq.com"
+    - "+.wechat.com"
+    - "+.qq.com"
+    - "+.qpic.cn"
+    - "+.qlogo.cn"
+    - "+.tenpay.com"
+    - "+.gtimg.com"
+    - "+.gtimg.cn"
+    - "+.myqcloud.com"
+    - "+.360buyimg.com"
+    - "+.douyin.com"
+    - "+.douyincdn.com"
+    - "www.bilibili.com"
+    - "api.bilibili.com"
+    - "a.w.bilicdn1.com"
+    - "music.163.com"
+    - "*.music.163.com"
+    - "*.126.net"
+    - "y.qq.com"
+    - "*.y.qq.com"
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 114.114.114.114
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 114.114.114.114
+  nameserver:
+    - "https://doh.pub/dns-query"
+    - "https://dns.alidns.com/dns-query"
+
+proxy-providers:
+  机场订阅:
+    type: http
+    url: "https://pics9.sknil-gnikiv.com/wx5TqEUTwXks/v1/w7LQhnaSTnjD/VikingLinks?token=b5918d82bc76ef59051239cdb4617817.140z6dkry5c.jpg"
+    path: ./proxy_providers/airport.yaml
+    interval: 3600
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+      timeout: 5000
+      lazy: true
+      expected-status: 204
+    override:
+      udp: true
+      client-fingerprint: chrome
+
+proxy-groups:
+  - name: "🚀 节点选择"
+    type: select
+    proxies:
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+      - "DIRECT"
+    use:
+      - 机场订阅
+
+  - name: "🇭🇰 香港节点"
+    type: select
+    use:
+      - 机场订阅
+    filter: "(港|HK|hk|Hong Kong|HongKong|hongkong)"
+
+  - name: "🇨🇳 台湾节点"
+    type: select
+    use:
+      - 机场订阅
+    filter: "(台|新北|彰化|TW|Taiwan)"
+
+  - name: "🇸🇬 狮城节点"
+    type: select
+    use:
+      - 机场订阅
+    filter: "(新加坡|坡|狮城|SG|Singapore)"
+
+  - name: "🇯🇵 日本节点"
+    type: select
+    use:
+      - 机场订阅
+    filter: "(日本|川日|东京|大阪|泉日|埼玉|沪日|深日|JP|Japan)"
+
+  - name: "🇺🇲 美国节点"
+    type: select
+    use:
+      - 机场订阅
+    filter: "(美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States)"
+
+  - name: "📲 电报信息"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+      - "🎯 全球直连"
+    use:
+      - 机场订阅
+
+  - name: "💬 Ai平台"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇺🇲 美国节点"
+      - "🇯🇵 日本节点"
+      - "🇸🇬 狮城节点"
+      - "🇨🇳 台湾节点"
+      - "🇭🇰 香港节点"
+      - "🎯 全球直连"
+    use:
+      - 机场订阅
+
+  - name: "📄 Twitter"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+      - "🎯 全球直连"
+    use:
+      - 机场订阅
+
+  - name: "🎥 Emby"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+      - "🎯 全球直连"
+    use:
+      - 机场订阅
+
+  - name: "📹 YouTube"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+      - "🎯 全球直连"
+    use:
+      - 机场订阅
+
+  - name: "🌍 国外媒体"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+      - "🎯 全球直连"
+    use:
+      - 机场订阅
+
+  - name: "Ⓜ️ 微软服务"
+    type: select
+    proxies:
+      - "🎯 全球直连"
+      - "🚀 节点选择"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+    use:
+      - 机场订阅
+
+  - name: "🍎 苹果服务"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🎯 全球直连"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+    use:
+      - 机场订阅
+
+  - name: "📢 谷歌FCM"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+      - "🎯 全球直连"
+    use:
+      - 机场订阅
+
+  - name: "🎯 全球直连"
+    type: select
+    proxies:
+      - "DIRECT"
+      - "🚀 节点选择"
+
+  - name: "🛑 全球拦截"
+    type: select
+    proxies:
+      - "REJECT"
+      - "DIRECT"
+
+  - name: "🍃 应用净化"
+    type: select
+    proxies:
+      - "REJECT"
+      - "DIRECT"
+
+  - name: "🐟 漏网之鱼"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港节点"
+      - "🇨🇳 台湾节点"
+      - "🇸🇬 狮城节点"
+      - "🇯🇵 日本节点"
+      - "🇺🇲 美国节点"
+      - "🎯 全球直连"
+    use:
+      - 机场订阅
+
+rule-providers:
+  LocalAreaNetwork_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/LocalAreaNetwork_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list"
+  UnBan_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/UnBan_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list"
+  BanAD_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/BanAD_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list"
+  BanProgramAD_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/BanProgramAD_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list"
+  GoogleFCM_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/GoogleFCM_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/GoogleFCM.list"
+  GoogleCN_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/GoogleCN_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list"
+  SteamCN_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/SteamCN_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/SteamCN.list"
+  Microsoft_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/Microsoft_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Microsoft.list"
+  Apple_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/Apple_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list"
+  Telegram_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/Telegram_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Telegram.list"
+  AI_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/AI_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/AI.list"
+  OpenAi_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/OpenAi_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/OpenAi.list"
+  Twitter_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/Twitter_list.list
+    url: "https://raw.githubusercontent.com/deezertidal/private/main/rule/Twitter.list"
+  Emby_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/Emby_list.list
+    url: "https://raw.githubusercontent.com/menxiaoguo/menxiaoguo/refs/heads/main/Emby.list"
+  YouTube_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/YouTube_list.list
+    url: "https://raw.githubusercontent.com/deezertidal/private/main/rule/YouTube.list"
+  YouTubeMusic_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/YouTubeMusic_list.list
+    url: "https://raw.githubusercontent.com/deezertidal/private/main/rule/YouTubeMusic.list"
+  ProxyMedia_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/ProxyMedia_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list"
+  ProxyLite_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/ProxyLite_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyLite.list"
+  ChinaDomain_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/ChinaDomain_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list"
+  ChinaCompanyIp_list:
+    type: http
+    behavior: classical
+    format: text
+    interval: 86400
+    path: ./ruleset/ChinaCompanyIp_list.list
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list"
+
+rules:
+  - RULE-SET,LocalAreaNetwork_list,🎯 全球直连
+  - RULE-SET,UnBan_list,🎯 全球直连
+  - RULE-SET,BanAD_list,🛑 全球拦截
+  - RULE-SET,BanProgramAD_list,🍃 应用净化
+  - RULE-SET,GoogleFCM_list,📢 谷歌FCM
+  - RULE-SET,GoogleCN_list,🎯 全球直连
+  - RULE-SET,SteamCN_list,🎯 全球直连
+  - RULE-SET,Microsoft_list,Ⓜ️ 微软服务
+  - RULE-SET,Apple_list,🍎 苹果服务
+  - RULE-SET,Telegram_list,📲 电报信息
+  - RULE-SET,AI_list,💬 Ai平台
+  - RULE-SET,OpenAi_list,💬 Ai平台
+  - RULE-SET,Twitter_list,📄 Twitter
+  - RULE-SET,Emby_list,🎥 Emby
+  - RULE-SET,YouTube_list,📹 YouTube
+  - RULE-SET,YouTubeMusic_list,📹 YouTube
+  - RULE-SET,ProxyMedia_list,🌍 国外媒体
+  - RULE-SET,ProxyLite_list,🚀 节点选择
+  - RULE-SET,ChinaDomain_list,🎯 全球直连
+  - RULE-SET,ChinaCompanyIp_list,🎯 全球直连
+  - GEOIP,CN,🎯 全球直连
+  - MATCH,🐟 漏网之鱼
