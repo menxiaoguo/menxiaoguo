@@ -126,7 +126,7 @@ proxy-providers:
   机场订阅:
     type: http
     url: "https://station.tuotuoyun.vip/zx87asd90ve/?token=8b4e24429ed94992226d35b007daeaf7"
-    path: ./proxy_providers/airport1.yaml
+    path: ./proxy_providers/airport2.yaml
     interval: 3600
     health-check:
       enable: true
