@@ -125,8 +125,8 @@ dns:
 proxy-providers:
   机场订阅:
     type: http
-    url: "https://liangxin.xyz/api/v1/liangxin?OwO=7790257f5b2821220789647df37af2b6"
-    path: ./proxy_providers/airport2.yaml
+    url: "https://train.suuwu.de/api/linkon?token=4af88667d11a4f2f551d2b0d6b96b6ac&protocol=anytls"
+    path: ./proxy_providers/airport6.yaml
     interval: 3600
     health-check:
       enable: true
@@ -139,7 +139,28 @@ proxy-providers:
       udp: true
       client-fingerprint: chrome
 
+proxies:
+  - name: "🇺🇸 加宽"
+    type: socks5
+    server: 66.128.204.42
+    port: 12324
+    username: "14af8b0ab684b"
+    password: "14993e3464"
+    udp: true
+    dialer-proxy: "🔌 加宽入口"
+
 proxy-groups:
+  - name: "🔌 加宽入口"
+    type: select
+    proxies:
+      - "🇭🇰 香港节点"
+      - "🇯🇵 日本节点"
+      - "🇸🇬 狮城节点"
+      - "🇺🇲 美国节点"
+      - "🇨🇳 台湾节点"
+    use:
+      - 机场订阅
+
   - name: "🚀 节点选择"
     type: select
     proxies:
@@ -198,6 +219,7 @@ proxy-groups:
   - name: "💬 Ai平台"
     type: select
     proxies:
+      - "🇺🇸 加宽"
       - "🚀 节点选择"
       - "🇺🇲 美国节点"
       - "🇯🇵 日本节点"
